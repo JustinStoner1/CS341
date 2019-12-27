@@ -1,0 +1,68 @@
+3 Using the flat profile:
+
+the progam spends most of its time in sort_words
+
+the program has to be using a very slow sorting algorthim to sort the words int the dictionary
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 76.84      6.34     6.34        1     6.34     6.34  sort_words
+ 20.82      8.06     1.72   214364     0.00     0.00  find_ele_rec
+  0.85      8.13     0.07  2953309     0.00     0.00  Strlen
+  0.79      8.19     0.07                             find_ele_iter_f
+
+Code:
+/* Sort hash table elements by frequency */
+h_ptr sort_words(int quick)
+{
+    h_ptr ls = NULL;
+    h_ptr ele;
+    h_ptr *array = calloc(ucnt, sizeof(h_ptr));
+    int i, j;
+    int cnt = 0;
+    scnt = 0; /* Count singletons */
+    for (i = 0; i < tsize; i++)
+	for (ele = htable[i]; ele; ele = ele->next) {
+	    if (ele->freq == 1)
+		scnt++;
+	    if (quick)
+		array[cnt] = ele;
+	    else {
+		for (j = cnt; j > 0 && ele->freq > array[j-1]->freq; j--)
+		    array[j] = array[j-1];
+		array[j] = ele;
+	    }
+	    cnt++;
+	}
+    if (quick) {
+	qsort((void *) array, cnt, sizeof(h_ptr), compare_ele);
+    }
+    ls = array[0];
+    for (j = 0; j < cnt-1; j++)
+	array[j]->next = array[j+1];
+    array[cnt-1]->next = NULL;
+    free ((void *) array);
+    return ls;
+}
+
+4 Using the call chain analysis:
+
+strlen is being called by Lower1 millions of times which  uses it to convert thigns to lower case
+
+-----------------------------------------------
+                0.00    0.03  214364/214364      insert_string [3]
+[6]      1.6    0.00    0.03  214364         lower1 [6]
+                0.03    0.00 2295739/2953309     Strlen [5]
+-----------------------------------------------
+
+5 Getting more experience with gprof
+
+the lower N is in the option "-n N", the faster the program goes
+find 2 and hash 1 are the fastest options for their respective options
+hash has a sweet spot and will slow the program if it is too high or too low
+
+my fastest command
+./dictionary-pg -quicksort 1 -lower 1 -find 2 -hash 1 -n 0 -size 23500  -file moby.txt
+
+
