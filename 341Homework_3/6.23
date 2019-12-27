@@ -1,0 +1,6 @@
+TavgSeek = 4ms
+TavgRotation = 0.5*(1/15000)*60*1000 = 2ms
+TavgTransfer = (1/15000)*(1/800)*60*1000 = 0.005ms
+
+Taccess = 4 + 2 + 0.005
+Taccess = 6ms;

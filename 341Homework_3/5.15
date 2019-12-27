@@ -1,0 +1,9 @@
+for (i = 0; i < (length-5);i+=6)
+{
+  sum = sum + undata[i] * vdata[i];
+  sum = sum + undata[i+1] * vdata[i+1];
+  sum = sum + undata[i+2] * vdata[i+2];
+  sum = sum + undata[i+3] * vdata[i+3];
+  sum = sum + undata[i+4] * vdata[i+4];
+  sum = sum + undata[i+5] * vdata[i+5];
+}
